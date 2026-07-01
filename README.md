@@ -1,34 +1,39 @@
-# DevSecOps CI/CD Pipeline & Containerized Web Service
+# DevSecOps CI/CD Pipeline & Web Service
 
 [![DevSecOps Pipeline](https://github.com/Yukihara64/devsecops-cicd-pipeline-showcase/actions/workflows/devsecops-pipeline.yml/badge.svg)](https://github.com/Yukihara64/devsecops-cicd-pipeline-showcase/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
-This repository demonstrates a secure CI/CD workflow for a Python FastAPI microservice. It incorporates automated code linting, security vulnerability scanning, multi-architecture container builds, and Software Bill of Materials (SBOM) generation using GitHub Actions.
+This repository demonstrates an automated CI/CD workflow for a Python FastAPI microservice. It incorporates code linting, container vulnerability scanning, multi-architecture builds, and Software Bill of Materials (SBOM) generation using GitHub Actions.
 
-## Pipeline Architecture
-The GitHub Actions workflow runs the following automated steps on every push and pull request:
-1. **Code Analysis & Linting**: Validates Python syntax and code formatting using lake8 and lack.
-2. **Container Build**: Compiles Docker images supporting both md64 and rm64 architectures.
-3. **Vulnerability Scanning**: Analyzes container layers and application dependencies for known security flaws using Trivy.
-4. **SBOM Generation**: Generates a complete Software Bill of Materials in SPDX JSON format using Syft to track third-party dependencies.
-5. **Registry Publish**: Pushes the validated image to GitHub Container Registry (GHCR).
+## Pipeline Workflow
+The GitHub Actions pipeline runs automated checks on every push and pull request:
 
-## Project Structure
-* pp/ - Python FastAPI REST API endpoints and application logic.
-* Dockerfile - Multi-stage, optimized Dockerfile using a non-root container user for improved security.
-* 
-equirements.txt - Project package dependencies.
-* .github/workflows/devsecops-pipeline.yml - Automated CI/CD pipeline definition.
+| Stage | Tools Used | Description |
+| :--- | :--- | :--- |
+| **1. Code Linting** | `flake8`, `black` | Validates Python code styling, formatting, and syntax consistency. |
+| **2. Container Build** | Docker Buildx | Compiles multi-architecture container images supporting both `amd64` and `arm64`. |
+| **3. Vulnerability Scan** | Trivy | Scans container OS layers and Python dependencies for known CVE vulnerabilities. |
+| **4. SBOM Generation** | Syft | Generates a Software Bill of Materials in SPDX JSON format to document dependency supply chain. |
+| **5. Registry Publish** | GHCR | Pushes the validated container image to GitHub Container Registry. |
 
-## Running Locally
-To run the API service locally using Docker:
-`ash
+## Repository Structure
+```text
+├── app/              # Python FastAPI REST API endpoints and application logic
+├── Dockerfile        # Multi-stage container definition using a non-root user
+├── requirements.txt  # Project package dependencies
+└── .github/          # Automated CI/CD pipeline workflow definitions
+```
+
+## Local Development
+To build and run the API service locally using Docker:
+
+```bash
 # Build the container image
 docker build -t fastapi-service:latest .
 
 # Run the container on port 8000
 docker run -p 8000:8000 fastapi-service:latest
 
-# Access the interactive API documentation at http://localhost:8000/docs
-`
+# Access interactive API docs at http://localhost:8000/docs
+```
